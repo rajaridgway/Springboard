@@ -134,12 +134,41 @@ QUESTIONS:
 /* Q10: Produce a list of facilities with a total revenue less than 1000.
 The output of facility name and total revenue, sorted by revenue. Remember
 that there's a different cost for guests and members! */
+SELECT f.name, 
+    SUM(CASE 
+        WHEN b.memid = 0 THEN (f.guestcost*b.slots)
+        WHEN b.memid != 0 THEN (f.membercost*b.slots)
+        ELSE NULL END) AS revenue
+FROM `Bookings` AS b
+    LEFT JOIN `Facilities` AS f ON b.facid = f.facid
+    LEFT JOIN `Members` AS m ON b.memid = m.memid
+GROUP BY f.name
+HAVING revenue < 1000
+ORDER BY revenue DESC;
 
 /* Q11: Produce a report of members and who recommended them in alphabetic surname,firstname order */
-
+SELECT CONCAT_WS(', ', m.surname, m.firstname) AS member_name,
+	CASE
+		WHEN m.recommendedby > 0 THEN CONCAT_WS(', ', r.surname, r.firstname) 
+		ELSE 'No Recommender' END AS recommender_name
+FROM `Members` m, `Members` r
+WHERE m.recommendedby = r.memid AND m.memid > 0
+ORDER by member_name;
 
 /* Q12: Find the facilities with their usage by member, but not guests */
-
+SELECT f.name, CONCAT_WS(', ', m.surname, m.firstname) AS member_name, SUM(b.slots*30) as usage_minutes
+FROM `Bookings` AS b
+    LEFT JOIN `Facilities` AS f ON b.facid = f.facid
+    LEFT JOIN `Members` AS m ON b.memid = m.memid
+WHERE m.memid != 0
+GROUP BY member_name
+ORDER BY f.name, member_name;
 
 /* Q13: Find the facilities usage by month, but not guests */
-
+SELECT f.name, MONTH(starttime) AS month, SUM(b.slots*30) as usage_minutes
+FROM `Bookings` AS b
+    LEFT JOIN `Facilities` AS f ON b.facid = f.facid
+    LEFT JOIN `Members` AS m ON b.memid = m.memid
+WHERE m.memid != 0
+GROUP BY f.name, month
+ORDER BY f.name, month;
