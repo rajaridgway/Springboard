@@ -1,0 +1,15 @@
+﻿Model Metrics Before Hyperparameter Tuning (Logistic Regression was selected as final model),,,,
+Algorithm,Model accuracy score,Model F1 score,Model Lift score,ROC-AUC test score
+Naive Bayes,0.729122,0.842955,1.002146,0.796838
+Logistic Regression,0.851178,0.905378,1.157902,0.868378
+Random Forest,0.776231,0.865595,1.056788,0.815386
+,,,,
+﻿Model Metrics After Hyperparameter Tuning (Logistic Regression was selected as final model),,,,
+Algorithm,Model accuracy score,Model F1 score,Model Lift score,ROC-AUC test score
+Logistic Regression,0.867237687,0.867237687,1.204306261,0.917878079
+,,,,
+Initial Parameters for Logistic Regression,,,,
+{max_iter=1000},,,,
+,,,,
+Hyperparameter Tuning Parameters for Logistic Regression,,,,
+"{C=10, max_iter=1000}",,,,
